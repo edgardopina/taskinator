@@ -1,9 +1,23 @@
-var createTaskHandler = function (event) {
+var formElement = document.querySelector("#task-form");
+var tasksToDoElement = document.querySelector("#tasks-to-do");
+
+var taskFormHandler = function (event)
+{
 	event.preventDefault(); // overides legacy browser behavior that submit uploads form to server
 
 	var taskNameInput = document.querySelector("input[name='task-name']").value;
 	var taskTypeInput = document.querySelector("select[name='task-type']").value;
 
+	// pack up data as an object
+	var taskDataObj = {
+		name: taskNameInput,
+		type: taskTypeInput,
+	};
+
+	createTaskElement(taskDataObj); // send it as an argument to createTaskEl
+};
+
+var createTaskElement = function (taskDataObj) {
 	var listItemElement = document.createElement("li"); // create list item
 	listItemElement.className = "task-item";
 
@@ -11,7 +25,7 @@ var createTaskHandler = function (event) {
 	taskInfoElement.className = "task-info";
 	// add HTML content to div
 	taskInfoElement.innerHTML =
-		"<h3 class='task-name'>" + taskNameInput + "</h3><span class='task-type'>" + taskTypeInput + "</span>";
+		"<h3 class='task-name'>" + taskDataObj.name + "</h3><span class='task-type'>" + taskDataObj.type + "</span>";
 
 	listItemElement.appendChild(taskInfoElement);
 	tasksToDoElement.appendChild(listItemElement);
@@ -31,7 +45,4 @@ var createTaskHandler = function (event) {
 
 // var buttonElement = document.querySelector("#save-task");
 
-var formElement = document.querySelector("#task-form");
-var tasksToDoElement = document.querySelector("#tasks-to-do");
-
-formElement.addEventListener("submit", createTaskHandler);
+formElement.addEventListener("submit", taskFormHandler);
