@@ -1,9 +1,19 @@
 var createTaskHandler = function (event) {
 	event.preventDefault(); // overides legacy browser behavior that submit uploads form to server
 
-	var listItemElement = document.createElement("li");
+	var taskNameInput = document.querySelector("input[name='task-name']").value;
+	var taskTypeInput = document.querySelector("select[name='task-type']").value;
+
+	var listItemElement = document.createElement("li"); // create list item
 	listItemElement.className = "task-item";
-	listItemElement.textContent = "This is a new task.";
+
+	var taskInfoElement = document.createElement("div"); // create div to hold task info and add to list item
+	taskInfoElement.className = "task-info";
+	// add HTML content to div
+	taskInfoElement.innerHTML =
+		"<h3 class='task-name'>" + taskNameInput + "</h3><span class='task-type'>" + taskTypeInput + "</span>";
+
+	listItemElement.appendChild(taskInfoElement);
 	tasksToDoElement.appendChild(listItemElement);
 };
 
