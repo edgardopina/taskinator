@@ -6,6 +6,18 @@ var tasksCompletedElement = document.querySelector("#tasks-completed");
 var pageContentElement = document.querySelector("#page-content");
 var tasksPersistance = []; // array of tasks for persistance
 
+var loadTasks = function () {
+	tasksPersistance = localStorage.getItem("tasks");
+	console.log(tasksPersistance);
+	// validates for non-existing key
+	if (tasksPersistance === null) {
+		tasksPersistance = []; // generates empty array for noin-existing key
+		return false;
+	}
+	tasksPersistance = JSON.parse(tasksPersistance); // parse data into array
+	console.log(tasksPersistance);
+};
+
 var saveTasks = function () {
 	localStorage.setItem("tasks", JSON.stringify(tasksPersistance));
 };
@@ -184,6 +196,8 @@ var taskFormHandler = function (event) {
 		createTaskElement(taskDataObj); // create tak element for taskDataObj
 	}
 };
+
+loadTasks();
 
 formElement.addEventListener("submit", taskFormHandler);
 
