@@ -1,6 +1,33 @@
 var formElement = document.querySelector("#task-form");
 var tasksToDoElement = document.querySelector("#tasks-to-do");
-var taskIdCounter = 0;	// unique task id
+var taskIdCounter = 0; // unique task id
+var pageContentElement = document.querySelector("#page-content");
+
+var editTask = function (taskId) {
+	// get element with class="task-item" and with data-task-id=taskId
+	var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+	var taskName = taskSelected.querySelector("h3.task-name").textContent; // get task name
+	var taskType = taskSelected.querySelector("span.task-type").textContent; // get task type
+	document.querySelector("#save-task").textContent = "Save Task";
+	formElement.setAttribute("data-task-id", taskId);
+};
+
+var deleteTask = function (taskId) {
+	// get element with class="task-item" and with data-task-id=taskId
+	var taskSelected = document.querySelector(".task-item[data-task-id='" + taskId + "']");
+	taskSelected.remove(); // delete task
+};
+
+var taskButtonHandler = function (event) {
+	var targetElement = event.target; // get target element from event
+	var taskId = targetElement.getAttribute("data-task-id"); // get the element's task
+	// the matches sintax could be done with clasName
+	if (targetElement.matches(".edit-btn")) {
+		editTask(taskId);
+	} else if (targetElement.matches(".delete-btn")) {
+		deleteTask(taskId);
+	}
+};
 
 var createTaskActions = function (taskId) {
 	var actionContainerElement = document.createElement("div"); // creater container <div> element
@@ -27,7 +54,7 @@ var createTaskActions = function (taskId) {
 	statusSelectElement.setAttribute("data-task-id", taskId);
 	actionContainerElement.appendChild(statusSelectElement); // adds empty <select> to <div> element
 
-	var statusChoices = ["To Do", "In Progress", "Completed"];	// adds options to empty select
+	var statusChoices = ["To Do", "In Progress", "Completed"]; // adds options to empty select
 	var statusChoicesLength = statusChoices.length;
 	for (var i = 0; i < statusChoicesLength; i++) {
 		var statusOptionElement = document.createElement("option"); // create option element
@@ -53,10 +80,10 @@ var createTaskElement = function (taskDataObj) {
 
 	listItemElement.appendChild(taskInfoElement); // adds task to list-item
 
-	var taskActionElement = createTaskActions(taskIdCounter); // builds edit/delete/status actions 
-	
+	var taskActionElement = createTaskActions(taskIdCounter); // builds edit/delete/status actions
+
 	listItemElement.appendChild(taskActionElement); // adds actions to list item
-	tasksToDoElement.appendChild(listItemElement); //adds list item to TO DO list 
+	tasksToDoElement.appendChild(listItemElement); //adds list item to TO DO list
 
 	taskIdCounter++; // increase task counter for next unique task id
 };
@@ -85,3 +112,5 @@ var taskFormHandler = function (event) {
 };
 
 formElement.addEventListener("submit", taskFormHandler);
+
+pageContentElement.addEventListener("click", taskButtonHandler);
